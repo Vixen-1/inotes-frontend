@@ -1,10 +1,12 @@
-import Navbar from "../components/Navbar";
-// import Home from "../components/Home";
-export default function Layout() {
+import React from 'react'
+import Navbar from '../components/Navbar'
+
+const Layout = () => {
   return (
-    <div>
-      <Navbar />
-      {/* <Home /> */}
-    </div>
-  );
+   <>
+   <Navbar />
+   </>
+  )
 }
+
+export default Layout
