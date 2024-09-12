@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import image from "../assets/background.jpg";
 import { Button } from "@mui/material";
+import '../shared/home.css'
 export default function Home() {
   const navigate = useNavigate();
   return (

@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+DK+Uloopet:wght@100..400&display=swap');
+
+@font-face {
+  font-family: mySecondFont;
+  src: url('https://fonts.googleapis.com/css2?family=Playwrite+DK+Uloopet:wght@100..400&display=swap');
+}
+
+
+
+/* login form */
+
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: #ecf2f6;
+  height: 100% !important;
+}
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border: 2px solid #d7d7d7;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  width: 30%;
+  margin: auto;
+  height: auto;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.login-form:hover {
+  background-color: #f7f7f7;
+  border: 2.5px solid #d7d7d7;
+  opacity: 2;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.form-input {
+  border: 2px;
+  border-radius: 5px;
+  border-color: black;
+}
+.form-heading {
+  font-size: 20px;
+  font-weight: 600;
+}

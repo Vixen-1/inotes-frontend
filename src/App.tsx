@@ -3,8 +3,8 @@ import Home from "./components/Home"
 import About from "./components/About"
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
-import Navbar from "./components/Navbar"
-// import Layout from "./Layout/Layout"
+// import Navbar from "./components/Navbar"
+import Layout from "./Layout/Layout"
 
 
 function App() {
@@ -14,10 +14,10 @@ function App() {
      basename="inotes"
      >
       <div className="App">
-        <Navbar />
+        {/* <Navbar /> */}
         <Routes>
-          <Route path="/" element={<Navigate replace to="/home" />} />
-          {/* <Route path="/note" element={<Layout />} /> */}
+          <Route path="/" element={<Navigate replace to="/note" />} />
+          <Route path="/note" element={<Layout />} />
           <Route path="/home" element={<Home />} />
           <Route path="/about" element={<About />} />  
           <Route path="/login" element={<Login />} />

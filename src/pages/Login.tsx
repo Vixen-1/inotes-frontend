@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "../shared/shared.css";
+// import "../shared/shared.css";
 const Login = () => {
   const navigate = useNavigate();
   return (
