@@ -11,3 +11,8 @@
 *::-webkit-scrollbar {
   display: none;  /* Chrome, Safari, and Opera */
 }
+
+body{
+/* background: rgb(38, 37, 37); */
+position: relative;
+}

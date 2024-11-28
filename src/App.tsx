@@ -1,31 +1,25 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-import Home from "./components/Home"
-import About from "./components/About"
-import Login from "./pages/Login"
-import Signup from "./pages/Signup"
-// import Navbar from "./components/Navbar"
-import Layout from "./Layout/Layout"
-
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Home from "./components/Home/Home";
+import Notes from "./components/Notes";
+import Login from "./pages/Login/Login";
+import Signup from "./pages/Signup/Signup";
+import Main from "./pages/Main";
 
 function App() {
-
   return (
-    <BrowserRouter
-     basename="inotes"
-     >
+    <BrowserRouter basename="inotes">
       <div className="App">
-        {/* <Navbar /> */}
         <Routes>
-          <Route path="/" element={<Navigate replace to="/note" />} />
-          <Route path="/note" element={<Layout />} />
+          <Route path="/" element={<Navigate replace to="/home" />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/about" element={<About />} />  
+          <Route path="/mainpage" element={<Main />} />
+          <Route path="/notes" element={<Notes />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />           
-          </Routes>
-          </div>
-      </BrowserRouter>
-  )
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

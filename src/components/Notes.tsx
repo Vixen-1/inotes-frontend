@@ -1,8 +1,11 @@
-import React from 'react'
+import Navbar from "./Navbar/Navbar"
 
 function Notes() {
   return (
-    <div>Notes</div>
+    <div>
+      <Navbar />
+      note is very important
+    </div>
   )
 }
 
