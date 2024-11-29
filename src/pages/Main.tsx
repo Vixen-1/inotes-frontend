@@ -69,18 +69,16 @@ export default function Main() {
               flex={1}
               padding={4}
             >
-              <Typography
-                variant="h1"
-                className="text-5xl md:text-7xl font-bold text-black tracking-widest animate-slideInFromLeft capitalize"
+              <h2
+                className="text-5xl cursor-default font-medium text-black tracking-widest animate-slideInFromLeft capitalize min-h-16"
               >
-                Hello, {userData.name}
-              </Typography>
-              <Typography
-                variant="h3"
-                className="text-2xl md:text-4xl font-medium tracking-widest capitalize animate-fadeIn pt-12"
+                Welcome, {userData.name}!
+              </h2>
+              <h4
+                className="text-2xl min-h-48 cursor-default md:text-4xl tracking-widest capitalize animate-fadeIn pt-12"
               >
-                Welcome to inotes
-              </Typography>
+                Let's organize your world, one note at a time!
+              </h4>
             </Box>
 
             {/* Image Section */}
@@ -91,7 +89,7 @@ export default function Main() {
                 backgroundImage: `url(${image2})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                borderRadius: "16px",
+                borderRadius: "6px",
                 height: "100%",
                 aspectRatio: "4/3", // Optional for responsiveness
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",

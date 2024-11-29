@@ -5,7 +5,7 @@ import Notes from './Notes'
 export default function Layout() {
   return (
     <div>
-        <Navbar />
+        <Navbar buttonName={'Logout'} />
         <Main />
         <Notes />
     </div>

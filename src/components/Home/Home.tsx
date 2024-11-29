@@ -3,11 +3,13 @@ import image from "../../assets/main-bg.jpg";
 import { Box, Button, Stack } from "@mui/material";
 import "./home.css";
 import "../../App.css";
+import Navbar from "../Navbar/Navbar";
 
 export default function Home() {
   const navigate = useNavigate();
   return (
     <Stack position={"relative"} height={"100vh"}>
+      <Navbar />
       <img alt="nature" className="bg-img" src={image} />
       <Box
         display={"flex"}
