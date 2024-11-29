@@ -1,26 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
+import secureLocalStorage from "react-secure-storage";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const handleLogout = () => {
+    secureLocalStorage.removeItem("authToken");
+    navigate("/");
+  };
   return (
-    <nav className="navbar-data">
+    <nav className="navbar-data fixed overflow-x-hidden animate-fadeIn">
       <div className="navbar">
-        <div className="navbar-logo-heading">
+        <div className="navbar-logo-heading drop-shadow-lg tracking-widest">
           INotes
           <span className="navbar-logo-desc">your notes on the cloud</span>
         </div>
-        {/* <div>
-          <ul className="navbar-pages">
-            <li onClick={() => navigate("/home")}>Home</li>
-            <li onClick={() => navigate("/about")}>About</li>
-          </ul>
-        </div> */}
         <div>
           <button
             className="signup-button"
             type="button"
-            onClick={() => navigate(`/signup`)}
+            onClick={handleLogout}
           >
             <span>Logout</span>
           </button>

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
-import "../../assets/styles/common.css";
-import image from "../../assets/main-bg.jpg";
+import "../assets/styles/common.css";
+import image from "../assets/main-bg.jpg";
 import axios from "axios";
 import Alert from "@mui/material/Alert";
-import "../../App.css";
+import "../App.css";
 import { Box, Stack, TextField, Typography } from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
 import { SiFacebook } from "react-icons/si";
@@ -34,8 +34,7 @@ const Signup: React.FC = () => {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSignup = async () => {
     try {
       const response = await axios.post(
         "http://localhost:5000/api/auth/createuser",
@@ -51,11 +50,10 @@ const Signup: React.FC = () => {
         secureLocalStorage.setItem("authToken", response.data.authToken);
         setSuccess(true);
         setError(null);
-        if (success) {
-          navigate("/notes");
-        }
+        navigate("/mainpage");
+        
       }
-      if(response.data.error){
+      if (response.data.error) {
         setError(response.data.error);
       }
     } catch (err) {
@@ -67,6 +65,12 @@ const Signup: React.FC = () => {
       }
       setSuccess(false);
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await handleSignup();
+    
   };
 
   const handleGoogleLogin = () => {
@@ -148,20 +152,20 @@ const Signup: React.FC = () => {
               <button type="submit">Signup</button>
             </Box>
             <Box
-            display={"flex"}
-            flexDirection={"row"}
-            gap={10}
-            justifyContent={"center"}
-          >
-            <FcGoogle
-              className="font-bold cursor-pointer text-2xl"
-              onClick={handleGoogleLogin}
-            />
-            <SiFacebook
-              className="bottom-link text-2xl"
-              onClick={handleFacebookLogin}
-            />
-          </Box>
+              display={"flex"}
+              flexDirection={"row"}
+              gap={10}
+              justifyContent={"center"}
+            >
+              <FcGoogle
+                className="font-bold cursor-pointer text-2xl"
+                onClick={handleGoogleLogin}
+              />
+              <SiFacebook
+                className="bottom-link text-2xl"
+                onClick={handleFacebookLogin}
+              />
+            </Box>
             <Box className="bottom">
               Already have an account?{" "}
               <span className="bottom-link" onClick={() => navigate("/login")}>

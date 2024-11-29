@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import image from "../../assets/main-bg.jpg";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import "./home.css";
 import "../../App.css";
 
@@ -16,18 +16,18 @@ export default function Home() {
         alignItems={"center"}
         className="content"
       >
-        <Typography variant="h1" className="text-content">
+        <h1 className="text-content text-5xl md:text-7xl font-bold text-white drop-shadow-lg tracking-widest animate-fadeIn">
           Welcome to INotes
-        </Typography>
-        <Box className="sub-content">
+        </h1>
+        <Box className="sub-content animate-fadeIn">
           <Box>
             Your ultimate solution for managing notes effortlessly on the cloud.
           </Box>
-          <Box>
-            Organize Your Thoughts: Add, update, and delete notes seamlessly.
+          <Box className='text-center'>
+            We will keep your notes private and accessible only to you.
           </Box>
-          <Box>
-            Secure Access: Keep your notes private and accessible only to you.
+          <Box className='text-center'>
+            To organize Your Thoughts
           </Box>
         </Box>
         <Box
@@ -42,7 +42,7 @@ export default function Home() {
           <Button
             variant="contained"
             onClick={() => navigate("/login")}
-            className="start-button "
+            className="start-button animate-pulse"
           >
             Get Started
           </Button>

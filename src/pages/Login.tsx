@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import "../../assets/styles/common.css";
+import "../assets/styles/common.css";
 import { useState } from "react";
 import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
-import image from "../../assets/main-bg.jpg";
+import image from "../assets/main-bg.jpg";
 import { Alert, Box, Stack, TextField, Typography } from "@mui/material";
-import "../../App.css";
+import "../App.css";
 import { FcGoogle } from "react-icons/fc";
 import { SiFacebook } from "react-icons/si";
 
@@ -31,6 +31,7 @@ const Login = () => {
     });
   };
 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -48,12 +49,11 @@ const Login = () => {
         secureLocalStorage.setItem("authToken", response.data.authToken);
         setSuccess(true);
         setError(null);
-        if (success) {
-          navigate("/notes");
-        }
+        navigate("/mainpage");
       }
       if (response.data.error) {
         setError(response.data.error);
+        // navigate("/errorpage");
       }
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
@@ -63,6 +63,7 @@ const Login = () => {
         setError("An unexpected error occurred.");
       }
       setSuccess(false);
+      // navigate("/errorpage");
     }
   };
 
@@ -130,7 +131,7 @@ const Login = () => {
               </Box>
             </Box>
             <Box className="submit-button mt-6">
-              <button type="submit" onClick={() => navigate("/mainpage")}>Login</button>
+              <button type="submit">Login</button>
             </Box>
           </form>
 
