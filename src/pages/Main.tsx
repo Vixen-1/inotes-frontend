@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import "../assets/styles/common.css";
 import { useEffect, useState } from "react";
 import secureLocalStorage from "react-secure-storage";
@@ -14,7 +14,7 @@ interface UserData {
   email: string;
 }
 
-export default function Main() {
+export default function Main({ onMakeNotesClick }: { onMakeNotesClick: () => void }) {
   const navigate = useNavigate();
   const token = secureLocalStorage.getItem("authToken");
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -79,6 +79,14 @@ export default function Main() {
               >
                 Let's organize your world, one note at a time!
               </h4>
+              <Button
+              variant="contained"
+              color="primary"
+              onClick={onMakeNotesClick}
+              className="mt-8"
+            >
+              Make Notes
+            </Button>
             </Box>
 
             {/* Image Section */}

@@ -8,6 +8,8 @@ import {
   CardContent,
   CardActions,
   Grid,
+  Stack,
+  Container,
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -16,17 +18,16 @@ import axios from "axios";
 import image2 from "../../assets/image.jpg";
 
 interface Note {
-  _id: string;
+  id: string;
   title: string;
   description: string;
   tag: string;
 }
 
 export default function Notes() {
-  const [edit, setEdit] = useState<boolean>(false);
   const [notes, setNotes] = useState<Note[]>([]);
   const [currentNote, setCurrentNote] = useState<Note>({
-    _id: "",
+    id: "",
     title: "",
     description: "",
     tag: "",
@@ -68,7 +69,7 @@ export default function Notes() {
       );
 
       setNotes((prev) => [...prev, response.data.note]);
-      setCurrentNote({ _id: "", title: "", description: "", tag: "" });
+      setCurrentNote({ id: "", title: "", description: "", tag: "" });
       fetchNotes();
     } catch (error) {
       console.error("Error adding note:", error);
@@ -78,27 +79,25 @@ export default function Notes() {
   const handleSaveEdit = async (note: Note) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/notes/updatenote/${note._id}`,
+        `http://localhost:5000/api/notes/updatenote/${note.id}`,
         note,
         {
           headers: { authorization: `Bearer ${token}` },
         }
       );
       alert("Note updated successfully!");
-      setEdit(false);
       fetchNotes();
     } catch (error) {
       console.error("Error saving note:", error);
     }
   };
 
-  console.log("---notes", notes)
   const handleDeleteNote = async (id: string) => {
     try {
       await axios.delete(`http://localhost:5000/api/notes/deletenote/${id}`, {
         headers: { authorization: `Bearer ${token}` },
       });
-      setNotes((prev) => prev.filter((note) => note._id !== id));
+      setNotes((prev) => prev.filter((note) => note.id !== id));
       fetchNotes();
     } catch (error) {
       console.error("Error deleting note:", error);
@@ -106,86 +105,60 @@ export default function Notes() {
   };
 
   return (
-    <Box
+    <Stack
+      className="relative block h-screen w-screen py-4"
       sx={{
-        position: "relative",
-        minHeight: "100vh",
         overflow: "hidden",
         backgroundImage: `url(${image2})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        "::before": {
-          content: '""',
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          zIndex: 0,
-        },
       }}
     >
       <Box
         sx={{
+          position: "absolute",
+          inset: 0,
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          zIndex: 0,
+        }}
+      />
+      <Container
+        sx={{
           position: "relative",
           zIndex: 1,
-          maxWidth: "1200px",
-          margin: "0 auto",
-          padding: "20px",
+          paddingY: 4,
+          backgroundColor: "rgba(255, 255, 255, 0.8)",
+          borderRadius: 4,
+          boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
         }}
       >
         <Typography
           variant="h3"
           align="center"
           gutterBottom
-          sx={{
-            color: "rgba(208, 207, 208)",
-            fontWeight: "bold",
-            textShadow: "2px 2px 8px rgba(0, 0, 0, 0.8)",
-          }}
+          sx={{ fontWeight: 600, color: "#2c3e50" }}
         >
           Notes Manager
         </Typography>
 
-        <Grid container spacing={3}>
+        <Grid container spacing={3} sx={{ marginY: 4 }}>
           {notes.map((note) => (
-            <Grid item xs={12} sm={6} md={4} key={note._id}>
+            <Grid item xs={12} sm={6} md={4} key={note.id}>
               <Card
                 sx={{
                   height: "220px",
+                  marginBottom: '20px',
                   display: "flex",
-                  marginBottom: "20px",
-                  marginRight: "8px",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  backgroundColor: "rgba(208, 207, 208, 0.8)",
-                  borderRadius: "10px",
-                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-                  transition: "transform 0.3s, box-shadow 0.3s",
-                  "&:hover": {
-                    transform: "scale(1.05)",
-                    boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.3)",
-                  },
+                  boxShadow: "8px 8px 16px rgba(0, 0, 0.1, 0.2)",
+                  transition: "transform 0.3s",
+                  "&:hover": { transform: "scale(1.05)" },
+                  backgroundColor: "#ffffff",
                 }}
               >
                 <CardContent>
-                  <Typography
-                    fontWeight="bold"
-                    variant="h6"
-                    gutterBottom
-                    contentEditable={edit}
-                    suppressContentEditableWarning
-                    onBlur={(e) =>
-                      setNotes((prevNotes) =>
-                        prevNotes.map((prevNote) =>
-                          prevNote._id === note._id
-                            ? { ...prevNote, title: e.target.textContent || "" }
-                            : prevNote
-                        )
-                      )
-                    }
-                  >
+                  <Typography variant="h6" gutterBottom>
                     {note.title}
                   </Typography>
                   <Typography
@@ -198,67 +171,27 @@ export default function Notes() {
                       WebkitLineClamp: 3,
                       WebkitBoxOrient: "vertical",
                     }}
-                    contentEditable={edit}
-                    suppressContentEditableWarning
-                    onBlur={(e) =>
-                      setNotes((prevNotes) =>
-                        prevNotes.map((prevNote) =>
-                          prevNote._id === note._id
-                            ? {
-                                ...prevNote,
-                                description: e.target.textContent || "",
-                              }
-                            : prevNote
-                        )
-                      )
-                    }
                   >
                     {note.description}
                   </Typography>
-                  <Typography
-                    variant="caption"
-                    color="primary"
-                    sx={{ marginTop: "16px", display: "block" }}
-                    contentEditable={edit}
-                    suppressContentEditableWarning
-                    onBlur={(e) =>
-                      setNotes((prevNotes) =>
-                        prevNotes.map((prevNote) =>
-                          prevNote._id === note._id
-                            ? { ...prevNote, tag: e.target.textContent || "" }
-                            : prevNote
-                        )
-                      )
-                    }
-                  >
+                  <Typography variant="caption" color="primary">
                     #{note.tag}
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  {!edit ? (
-                    <Button
-                      size="small"
-                      color="primary"
-                      startIcon={<FontAwesomeIcon icon={faEdit} />}
-                      onClick={() => setEdit(true)}
-                    >
-                      Edit
-                    </Button>
-                  ) : (
-                    <Button
-                      size="small"
-                      color="primary"
-                      startIcon={<FontAwesomeIcon icon={faEdit} />}
-                      onClick={() => handleSaveEdit(note)}
-                    >
-                      Save
-                    </Button>
-                  )}
+                  <Button
+                    size="small"
+                    color="primary"
+                    startIcon={<FontAwesomeIcon icon={faEdit} />}
+                    onClick={() => handleSaveEdit(note)}
+                  >
+                    Save
+                  </Button>
                   <Button
                     size="small"
                     color="error"
                     startIcon={<FontAwesomeIcon icon={faTrash} />}
-                    onClick={() => handleDeleteNote(note._id)}
+                    onClick={() => handleDeleteNote(note.id)}
                   >
                     Delete
                   </Button>
@@ -270,21 +203,15 @@ export default function Notes() {
 
         <Box
           sx={{
-            backgroundColor: "rgba(208, 207, 208, 0.8)",
-            padding: 4,
-            margin: "auto",
-            width: "50%",
-            borderRadius: "10px",
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-            marginTop: "40px",
+            margin: 'auto',
+            width: '50%',
+            padding: 2,
+            backgroundColor: "#f9f9f9",
+            borderRadius: 4,
+            boxShadow: "4px 8px 16px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <Typography
-            variant="h5"
-            fontWeight={"bold"}
-            align="center"
-            gutterBottom
-          >
+          <Typography variant="h5" align="center" gutterBottom>
             Add a New Note
           </Typography>
           <form>
@@ -326,14 +253,13 @@ export default function Notes() {
                 color="primary"
                 startIcon={<FontAwesomeIcon icon={faPlus} />}
                 onClick={handleAddNote}
-                sx={{ padding: "10px 20px", fontWeight: "bold" }}
               >
                 Add Note
               </Button>
             </Box>
           </form>
         </Box>
-      </Box>
-    </Box>
+      </Container>
+    </Stack>
   );
 }
