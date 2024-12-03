@@ -9,7 +9,7 @@ import "../App.css";
 import { Box, Stack, TextField, Typography } from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
 import { SiFacebook } from "react-icons/si";
-
+import { Snackbar } from "@mui/material";
 interface SignupFormData {
   name: string;
   email: string;
@@ -33,6 +33,16 @@ const Signup: React.FC = () => {
       [e.target.name]: e.target.value,
     });
   };
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error" | "info" | "warning",
+  });
+
+  const handleSnackbarClose = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
+
 
   const handleSignup = async () => {
     try {
@@ -50,18 +60,38 @@ const Signup: React.FC = () => {
         secureLocalStorage.setItem("authToken", response.data.authToken);
         setSuccess(true);
         setError(null);
+        setSnackbar({
+          open: true,
+          message: `Signup successful`,
+          severity: "success",
+        });
         navigate("/mainpage");
         
       }
       if (response.data.error) {
         setError(response.data.error);
+        setSnackbar({
+          open: true,
+          message: `${error}`,
+          severity: "error",
+        });
       }
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
         setError(err.response.data.error);
+        setSnackbar({
+          open: true,
+          message: `${error}`,
+          severity: "error",
+        });
         console.log(error);
       } else {
         setError("An unexpected error occurred.");
+        setSnackbar({
+          open: true,
+          message: `${error}`,
+          severity: "error",
+        });
       }
       setSuccess(false);
     }
@@ -74,11 +104,11 @@ const Signup: React.FC = () => {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:5000/auth/google";
+    window.location.href = "/auth/google";
   };
 
   const handleFacebookLogin = () => {
-    window.location.href = "http://localhost:5000/auth/facebook";
+    window.location.href = "/auth/facebook";
   };
 
   return (
@@ -91,16 +121,6 @@ const Signup: React.FC = () => {
         alignItems={"center"}
       >
         <Box className="signup-box">
-          {error && (
-            <Alert severity="error" className="mt-2 text-sm">
-              {error}
-            </Alert>
-          )}
-          {success && (
-            <Alert severity="success" className="mt-2 text-sm">
-              Signup successful.
-            </Alert>
-          )}
           <Typography
             variant="h4"
             color={"white"}
@@ -176,6 +196,16 @@ const Signup: React.FC = () => {
           </form>
         </Box>
       </Box>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Stack>
   );
 };

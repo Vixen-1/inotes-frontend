@@ -4,10 +4,11 @@ import { useState } from "react";
 import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
 import image from "../assets/main-bg.jpg";
-import { Alert, Box, Stack, TextField, Typography } from "@mui/material";
+import { Box, Stack, TextField, Typography } from "@mui/material";
 import "../App.css";
 import { FcGoogle } from "react-icons/fc";
 import { SiFacebook } from "react-icons/si";
+import { Snackbar, Alert } from "@mui/material";
 
 interface LoginFormData {
   email: string;
@@ -31,6 +32,15 @@ const Login = () => {
     });
   };
 
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error" | "info" | "warning",
+  });
+
+  const handleSnackbarClose = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,19 +58,39 @@ const Login = () => {
       if (response.data.authToken) {
         secureLocalStorage.setItem("authToken", response.data.authToken);
         setSuccess(true);
+        setSnackbar({
+          open: true,
+          message: `Login Successful`,
+          severity: "success",
+        });
         setError(null);
         navigate("/mainpage");
       }
       if (response.data.error) {
         setError(response.data.error);
+        setSnackbar({
+          open: true,
+          message: `${error}`,
+          severity: "error",
+        });
         // navigate("/errorpage");
       }
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
         setError(err.response.data.error);
+        setSnackbar({
+          open: true,
+          message: `${error}`,
+          severity: "error",
+        });
         console.log(error);
       } else {
         setError("An unexpected error occurred.");
+        setSnackbar({
+          open: true,
+          message: `${error}`,
+          severity: "error",
+        });
       }
       setSuccess(false);
       // navigate("/errorpage");
@@ -68,11 +98,11 @@ const Login = () => {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:5000/auth/google";
+    window.location.href = "/auth/google";
   };
 
   const handleFacebookLogin = () => {
-    window.location.href = "http://localhost:5000/auth/facebook";
+    window.location.href = "/auth/facebook";
   };
 
   return (
@@ -85,16 +115,6 @@ const Login = () => {
         alignItems={"center"}
       >
         <Box className="signup-box">
-          {error && (
-            <Alert severity="error" className="">
-              {error}
-            </Alert>
-          )}
-          {success && (
-            <Alert severity="success" className="mt-2 text-sm">
-              Login successful.
-            </Alert>
-          )}
           <Typography
             color={"white"}
             variant="h4"
@@ -160,6 +180,16 @@ const Login = () => {
           </Box>
         </Box>
       </Box>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Stack>
   );
 };

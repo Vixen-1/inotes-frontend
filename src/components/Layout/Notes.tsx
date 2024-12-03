@@ -18,6 +18,7 @@ interface Note {
   title: string;
   description: string;
   tag: string;
+  date: string;
 }
 
 export default function Notes({
@@ -44,6 +45,28 @@ export default function Notes({
     if (token) fetchNotes();
   }, [token]);
 
+  const formatDateAndTime = (isoString) => {
+    const dateObj = new Date(isoString);
+  
+    // Format date as dd-mm-yyyy
+    const date = dateObj.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  
+    // Format time as hh:mm:ss
+    const time = dateObj.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false, // 24-hour format
+    });
+  
+    return { date, time };
+  };
+
+  
   return (
     <Box
       sx={{
@@ -109,7 +132,8 @@ export default function Notes({
                 }}
               >
                 <CardContent>
-                <Typography
+                  <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
+                  <Typography
                     variant="caption"
                     color="primary"
                     sx={{ marginTop: "16px", display: "block" }}
@@ -128,8 +152,18 @@ export default function Notes({
                     #{note.tag}
                   </Typography>
                   <Typography
+                    variant="caption"
+                    color="textSecondary"
+                    sx={{ marginTop: "16px", display: "block" }}                    
+                  >
+                    {`Date: ${formatDateAndTime(note.date).date} Time: ${formatDateAndTime(note.date).time} `}
+                  </Typography>
+                  </Box>
+                  <Typography
                     fontWeight="bold"
                     variant="h6"
+                    margin={2}
+                    className="capitalize"
                     gutterBottom
                     contentEditable={edit}
                     suppressContentEditableWarning
