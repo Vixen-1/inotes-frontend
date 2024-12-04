@@ -45,7 +45,7 @@ export default function Layout() {
   const fetchNotes = async () => {
     try {
       const response = await axios.get(
-        `https://inotes-backend/khaki/api/notes/fetchallnotes`,
+        `https://inotes-backend-khaki/api/notes/fetchallnotes`,
         {
           headers: { authorization: `Bearer ${token}` },
         }
@@ -73,7 +73,7 @@ export default function Layout() {
 
     try {
       const response = await axios.post(
-        `https://inotes-backend/khaki/api/notes/addnote`,
+        `https://inotes-backend-khaki/api/notes/addnote`,
         currentNote,
         {
           headers: { authorization: `Bearer ${token}` },
@@ -101,7 +101,7 @@ export default function Layout() {
   const handleSaveEdit = async (note: Note) => {
     try {
       await axios.put(
-        `https://inotes-backend/khaki/api/notes/updatenote/${note._id}`,
+        `https://inotes-backend-khaki/api/notes/updatenote/${note._id}`,
         note,
         {
           headers: { authorization: `Bearer ${token}` },
@@ -126,7 +126,7 @@ export default function Layout() {
 
   const handleDeleteNote = async (id: string) => {
     try {
-      await axios.delete(`https://inotes-backend/khaki/api/notes/deletenote/${id}`, {
+      await axios.delete(`https://inotes-backend-khaki/api/notes/deletenote/${id}`, {
         headers: { authorization: `Bearer ${token}` },
       });
       setNotes((prev) => prev.filter((note) => note._id !== id));

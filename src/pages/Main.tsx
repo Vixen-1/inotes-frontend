@@ -40,7 +40,7 @@ export default function Main({
   const token = secureLocalStorage.getItem("authToken");
   const [userData, setUserData] = useState<UserData | null>(null);
   
-  const url = `https://inotes-backend/khaki/api/auth/getuser`;
+  const url = `https://inotes-backend-khaki/api/auth/getuser`;
 
   useEffect(() => {
     const fetchUser = async () => {

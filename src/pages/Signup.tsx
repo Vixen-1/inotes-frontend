@@ -46,7 +46,7 @@ const Signup: React.FC = () => {
   const handleSignup = async () => {
     try {
       const response = await axios.post(
-        `https://inotes-backend/khaki/api/auth/createuser`,
+        `https://inotes-backend-khaki/api/auth/createuser`,
         formData,
         {
           headers: {
