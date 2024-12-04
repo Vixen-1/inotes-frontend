@@ -16,13 +16,13 @@ interface LoginFormData {
 }
 
 const Login = () => {
+  const api_url = import.meta.env.VITE_API_URL;
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
   });
 
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +46,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        `${api_url}/api/auth/login`,
         formData,
         {
           headers: {
@@ -57,7 +57,6 @@ const Login = () => {
 
       if (response.data.authToken) {
         secureLocalStorage.setItem("authToken", response.data.authToken);
-        setSuccess(true);
         setSnackbar({
           open: true,
           message: `Login Successful`,
@@ -92,7 +91,6 @@ const Login = () => {
           severity: "error",
         });
       }
-      setSuccess(false);
       // navigate("/errorpage");
     }
   };
