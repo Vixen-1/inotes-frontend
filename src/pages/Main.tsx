@@ -113,7 +113,7 @@ export default function Main({
               flex={1}
               padding={4}
             >
-              <h2 className="text-5xl cursor-default font-medium text-black tracking-widest capitalize min-h-16">
+              <h2 className="text-5xl cursor-default font-medium text-black tracking-widest capitalize min-h-50">
                 Welcome, {userData.name}!
               </h2>
               <h4 className="text-2xl min-h-48 cursor-default md:text-4xl tracking-widest capitalize pt-12">

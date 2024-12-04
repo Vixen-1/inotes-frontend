@@ -97,20 +97,21 @@ export default function Notes({
           padding: "20px",
         }}
       >
-        <Typography
+        {/* <Typography
           variant="h3"
           align="center"
           gutterBottom
           sx={{
             color: "rgba(208, 207, 208)",
             fontWeight: "bold",
+            // marginTop: "40px",
             textShadow: "2px 2px 8px rgba(0, 0, 0, 0.8)",
           }}
         >
           Notes Manager
-        </Typography>
+        </Typography> */}
 
-        <Grid container spacing={3}>
+        <Grid container marginTop={'40px'} spacing={3}>
           {notes.map((note) => (
             <Grid item xs={12} sm={6} md={4} key={note._id}>
               <Card
@@ -161,8 +162,8 @@ export default function Notes({
                   </Box>
                   <Typography
                     fontWeight="bold"
-                    variant="h6"
-                    margin={2}
+                    variant="h5"
+                    marginY={2}
                     className="capitalize"
                     gutterBottom
                     contentEditable={edit}

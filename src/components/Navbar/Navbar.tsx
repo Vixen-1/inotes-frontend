@@ -18,7 +18,7 @@ export default function Navbar({ buttonName }: { buttonName?: string }) {
         {buttonName && (
           <div>
           <button
-            className="signup-button"
+            className="absolute top-2 right-4 bg-black text-white px-4 py-2 rounded-md shadow-md hover:bg-white hover:text-black"
             onClick={handleLogout}
           >
             <span>{buttonName}</span>

@@ -24,7 +24,6 @@ const Signup: React.FC = () => {
   });
 
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,7 +57,6 @@ const Signup: React.FC = () => {
 
       if (response.data.authToken) {
         secureLocalStorage.setItem("authToken", response.data.authToken);
-        setSuccess(true);
         setError(null);
         setSnackbar({
           open: true,
@@ -93,7 +91,6 @@ const Signup: React.FC = () => {
           severity: "error",
         });
       }
-      setSuccess(false);
     }
   };
 

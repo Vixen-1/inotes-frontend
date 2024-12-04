@@ -73,7 +73,7 @@ export default function Layout() {
 
     try {
       const response = await axios.post(
-        "http:localhost:5000/api/notes/addnote",
+        "http://localhost:5000/api/notes/addnote",
         currentNote,
         {
           headers: { authorization: `Bearer ${token}` },
