@@ -43,7 +43,7 @@ export default function Notes({
 
   useEffect(() => {
     if (token) fetchNotes();
-  }, [token]);
+  }, [fetchNotes, token]);
 
   const formatDateAndTime = (isoString: string) => {
     const dateObj = new Date(isoString);

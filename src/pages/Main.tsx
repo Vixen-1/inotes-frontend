@@ -1,6 +1,6 @@
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import "../assets/styles/common.css";
-import React,{ useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
 import image from "../assets/ohho.jpg";
@@ -43,29 +43,28 @@ export default function Main({
   // const api = import.meta.env.VITE_API_URL
   const url = `${api_url}/api/auth/getuser`;
 
-  const fetchUser = async () => {
-    try {
-      const response = await axios.post(
-        url,
-        {},
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setUserData(response.data);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      navigate("/errorpage");
-    }
-  };
-
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.post(
+          url,
+          {},
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setUserData(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        navigate("/errorpage");
+      }
+    };
     if (token) {
       fetchUser();
     }
-  }, [token]);
+  }, [navigate, token, url]);
 
   console.log(notes);
   const [errors, setErrors] = useState({
