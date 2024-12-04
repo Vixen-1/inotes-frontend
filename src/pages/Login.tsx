@@ -16,7 +16,6 @@ interface LoginFormData {
 }
 
 const Login = () => {
-  const api_url = import.meta.env.VITE_API_URL;
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
@@ -46,7 +45,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${api_url}/api/auth/login`,
+        `/api/auth/login`,
         formData,
         {
           headers: {

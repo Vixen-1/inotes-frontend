@@ -15,7 +15,6 @@ interface Note {
 }
 
 export default function Layout() {
-  const api_url = import.meta.env.VITE_API_URL;
   const notesRef = useRef<HTMLDivElement>(null);
   const scrollToNotes = () => {
     notesRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -46,7 +45,7 @@ export default function Layout() {
   const fetchNotes = async () => {
     try {
       const response = await axios.get(
-        `${api_url}/api/notes/fetchallnotes`,
+        `/api/notes/fetchallnotes`,
         {
           headers: { authorization: `Bearer ${token}` },
         }
@@ -74,7 +73,7 @@ export default function Layout() {
 
     try {
       const response = await axios.post(
-        `${api_url}/api/notes/addnote`,
+        `/api/notes/addnote`,
         currentNote,
         {
           headers: { authorization: `Bearer ${token}` },
@@ -102,7 +101,7 @@ export default function Layout() {
   const handleSaveEdit = async (note: Note) => {
     try {
       await axios.put(
-        `${api_url}/api/notes/updatenote/${note._id}`,
+        `/api/notes/updatenote/${note._id}`,
         note,
         {
           headers: { authorization: `Bearer ${token}` },
@@ -127,7 +126,7 @@ export default function Layout() {
 
   const handleDeleteNote = async (id: string) => {
     try {
-      await axios.delete(`${api_url}/api/notes/deletenote/${id}`, {
+      await axios.delete(`/api/notes/deletenote/${id}`, {
         headers: { authorization: `Bearer ${token}` },
       });
       setNotes((prev) => prev.filter((note) => note._id !== id));
