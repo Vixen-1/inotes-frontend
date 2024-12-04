@@ -33,7 +33,7 @@ export default function Notes({
   edit: boolean;
   setEdit: (edit: boolean) => void;
   notes: Note[];
-  setNotes: (notes: Note[]) => React.Dispatch<React.SetStateAction<Note[]>>;
+  setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
   fetchNotes: () => void;
   handleSaveEdit: (note: Note) => void;
   handleDeleteNote: (id: string) => void;
@@ -45,7 +45,7 @@ export default function Notes({
     if (token) fetchNotes();
   }, [token]);
 
-  const formatDateAndTime = (isoString) => {
+  const formatDateAndTime = (isoString: string) => {
     const dateObj = new Date(isoString);
   
     // Format date as dd-mm-yyyy
@@ -193,7 +193,7 @@ export default function Notes({
                     contentEditable={edit}
                     suppressContentEditableWarning
                     onBlur={(e) =>
-                      setNotes((prevNotes:any) => {
+                      setNotes((prevNotes) => {
                         return prevNotes.map((prevNote) =>
                           prevNote._id === note._id
                             ? { ...prevNote, description: e.target.textContent || "" }
