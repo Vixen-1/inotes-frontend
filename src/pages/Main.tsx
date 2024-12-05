@@ -1,13 +1,12 @@
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import "../assets/styles/common.css";
 import { useEffect, useState } from "react";
-import secureLocalStorage from "react-secure-storage";
-import axios from "axios";
 import image from "../assets/ohho.jpg";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useGetUserDataQuery } from "../redux/ApiSlice";
 
 interface UserData {
   _id: string;
@@ -37,50 +36,63 @@ export default function Main({
   handleAddNote: () => void;
 }) {
   const navigate = useNavigate();
-  const token = secureLocalStorage.getItem("authToken");
   const [userData, setUserData] = useState<UserData | null>(null);
-  // const api = import.meta.env.VITE_API_URL
-  const url = 'https://todo-cloudy.onrender.com/api/auth/getuser';
 
+  const { data: apiResponse, error } = useGetUserDataQuery({});
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.post(
-          url,
-          {},
-          {
-            headers: {
-              authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setUserData(response.data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        navigate("/errorpage");
-      }
-    };
-    if (token) {
-      fetchUser();
-    }
-  }, [navigate, token, url]);
+    if (apiResponse) setUserData(apiResponse);
+    if (error) navigate("/errorpage");
+  }, [apiResponse, error, navigate]);
 
   console.log(notes);
   const [errors, setErrors] = useState({
     title: false,
     description: false,
-    // tag: false,
+  });
+
+  const [errorsHelperText, setErrorsHelperText] = useState({
+    title: "",
+    description: "",
   });
 
   const validateForm = () => {
+    let titleHelperText = "";
+    let descriptionHelperText = "";
+
+    const isTitleEmpty = currentNote.title.trim().length === 0;
+    const isTitleTooShort = currentNote.title.trim().length < 3;
+
+    const isDescriptionEmpty = currentNote.description.trim().length === 0;
+    const isDescriptionTooShort = currentNote.description.trim().length < 5;
+    const isDescriptionSingleWord =
+      currentNote.description.trim().split(/\s+/).length === 1;
+
+    if (isTitleEmpty) {
+      titleHelperText = "Title cannot be empty.";
+    } else if (isTitleTooShort) {
+      titleHelperText = "Title must be at least 3 characters long.";
+    }
+
+    if (isDescriptionEmpty) {
+      descriptionHelperText = "Description cannot be empty.";
+    } else if (isDescriptionTooShort && isDescriptionSingleWord) {
+      descriptionHelperText = "Description cannot be just a word.";
+    } else if (isDescriptionTooShort) {
+      descriptionHelperText = "Description must be at least 5 characters long.";
+    }
+
     const newErrors = {
-      title: currentNote.title === "",
-      description: currentNote.description === "",
-      // tag: currentNote.tag === "",
+      title: !!titleHelperText,
+      description: !!descriptionHelperText,
     };
+
     setErrors(newErrors);
 
-    // Check if there are any errors
+    setErrorsHelperText({
+      title: titleHelperText,
+      description: descriptionHelperText,
+    });
+
     return !Object.values(newErrors).some((error) => error);
   };
 
@@ -144,19 +156,18 @@ export default function Main({
                 boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
                 marginTop: "40px",
                 transition: "transform 0.3s, box-shadow 0.3s",
-                  "&:hover": {
-                    transform: "scale(1.05)",
-                    boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.3)",
-                  },
+                "&:hover": {
+                  transform: "scale(1.05)",
+                  boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.3)",
+                },
               }}
             >
-              
               <Typography
                 variant="h5"
                 fontWeight={"bold"}
                 align="center"
                 gutterBottom
-                sx={{ color:'rgba(0, 0, 0)' }}
+                sx={{ color: "rgba(0, 0, 0)" }}
               >
                 Add a New Note
               </Typography>
@@ -168,7 +179,11 @@ export default function Main({
                   justifyContent={"space-between"}
                   alignItems={"center"}
                 >
-                  <Typography paddingRight={2} fontWeight={"bold"} fontSize={20}>
+                  <Typography
+                    paddingRight={2}
+                    fontWeight={"bold"}
+                    fontSize={20}
+                  >
                     Title
                   </Typography>
                   <TextField
@@ -180,7 +195,7 @@ export default function Main({
                     }
                     className="input"
                     error={errors.title}
-            helperText={errors.title ? "Title is required." : ""}
+                    helperText={errorsHelperText.title}
                   />
                 </Box>
                 <Box
@@ -190,7 +205,11 @@ export default function Main({
                   justifyContent={"space-between"}
                   alignItems={"center"}
                 >
-                  <Typography paddingRight={4.5} fontWeight={"bold"} fontSize={20}>
+                  <Typography
+                    paddingRight={4.5}
+                    fontWeight={"bold"}
+                    fontSize={20}
+                  >
                     Description
                   </Typography>
                   <TextField
@@ -207,7 +226,7 @@ export default function Main({
                       })
                     }
                     error={errors.description}
-            helperText={errors.description ? "Description is required." : ""}
+                    helperText={errorsHelperText.description}
                     margin="normal"
                   />
                 </Box>
@@ -218,7 +237,11 @@ export default function Main({
                   justifyContent={"space-between"}
                   alignItems={"center"}
                 >
-                  <Typography paddingRight={3} fontWeight={"bold"} fontSize={20}>
+                  <Typography
+                    paddingRight={3}
+                    fontWeight={"bold"}
+                    fontSize={20}
+                  >
                     Tag
                   </Typography>
                   <TextField
@@ -248,13 +271,24 @@ export default function Main({
           </Box>
         ) : (
           <Box className="flex flex-col gap-6 justify-center tracking-widest animate-pulse">
-            <Typography variant="h5" color={'black'} fontWeight={'bold'} className="bottom-link font-bold text-white drop-shadow-lg">Authentication failed!</Typography>
+            <Typography
+              variant="h5"
+              color={"black"}
+              fontWeight={"bold"}
+              className="bottom-link font-bold text-white drop-shadow-lg"
+            >
+              Authentication failed!
+            </Typography>
             <Box className="bottom text-black font-bold">
-            Go back to Home page {" "}
-            <Button variant="contained" className="bottom-link" onClick={() => navigate("/")}>
-              Go Back
-            </Button>
-          </Box>
+              Go back to Home page{" "}
+              <Button
+                variant="contained"
+                className="bottom-link"
+                onClick={() => navigate("/")}
+              >
+                Go Back
+              </Button>
+            </Box>
           </Box>
         )}
       </Box>

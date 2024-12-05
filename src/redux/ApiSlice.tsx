@@ -1,54 +1,56 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import secureLocalStorage from "react-secure-storage";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import secureLocalStorage from 'react-secure-storage';
 
-export const INotesApi = createApi({
-  reducerPath: "INotesApi",
+export const TodoApi = createApi({
+  reducerPath: 'apii',
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/",
+    baseUrl: 'https://todo-cloudy.onrender.com/api',
     prepareHeaders: (headers) => {
       const token = secureLocalStorage.getItem("authToken");
       if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
+        headers.set('authorization', `Bearer ${token}`);
       }
       return headers;
     },
   }),
-
   endpoints: (builder) => ({
     getAllData: builder.query({
-      query: (url) => `${url}`,
+      query: () => '/notes/fetchallnotes',
     }),
-
-    getAllPostData: builder.query({
-      query: ({url}) => ({
-        url,
-        method: "POST",
-        body: {},
+    getUserData: builder.query({
+      query: () => ({
+        url: '/auth/getuser',
+        method: 'POST',
+        body:{}
       }),
     }),
-
-    deleteApi: builder.mutation({
-      query: ({ url, id }) => ({
-        url: `${url}/${id}`,
-        method: "DELETE",
+    addNote: builder.mutation({
+      query: (note) => ({
+        url: '/notes/addnote',
+        method: 'POST',
+        body: note,
       }),
     }),
-
-    updateApi: builder.mutation({
-      query: ({ url, id, data }) => ({
-        url: `${url}/${id}`,
-        method: "PUT",
+    updateNote: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/notes/updatenote/${id}`,
+        method: 'PUT',
         body: data,
       }),
     }),
-
-    
+    deleteNote: builder.mutation({
+      query: ({id}) => ({
+        url: `/notes/deletenote/${id}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
 export const {
   useGetAllDataQuery,
-  useGetAllPostDataQuery,
-  useDeleteApiMutation,
-  useUpdateApiMutation,
-} = INotesApi;
+  useGetUserDataQuery,
+  useAddNoteMutation,
+  useUpdateNoteMutation,
+  useDeleteNoteMutation,
+} = TodoApi;

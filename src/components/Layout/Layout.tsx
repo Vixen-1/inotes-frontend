@@ -1,10 +1,10 @@
-import axios from "axios";
 import Main from "../../pages/Main";
 import Navbar from "../Navbar/Navbar";
 import Notes from "./Notes";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import secureLocalStorage from "react-secure-storage";
 import { Snackbar, Alert } from "@mui/material";
+import { useAddNoteMutation, useDeleteNoteMutation, useGetAllDataQuery, useUpdateNoteMutation } from "../../redux/ApiSlice";
 
 interface Note {
   _id: string;
@@ -42,25 +42,19 @@ export default function Layout() {
 
   const token = secureLocalStorage.getItem("authToken");
 
-  const fetchNotes = async () => {
-    try {
-      const response = await axios.get(
-        'https://todo-cloudy.onrender.com/api/notes/fetchallnotes',
-        {
-          headers: { authorization: `Bearer ${token}` },
-        }
-      );
-      setNotes(response.data);
-    } catch (error) {
+  const {data: apiResponse=[], error, refetch} = useGetAllDataQuery({});
+  useEffect(()=>{
+    if(apiResponse)
+      setNotes(apiResponse)
+    if(error)
       setSnackbar({
         open: true,
         message: "Error fetching notes",
         severity: "error",
       });
-      console.error("Error fetching notes:", error);
-    }
-  };
+  }, [apiResponse,error])
 
+  const [AddNoteMutation] = useAddNoteMutation();
   const handleAddNote = async () => {
     if (!currentNote.title || !currentNote.description || !currentNote.tag) {
       setSnackbar({
@@ -72,17 +66,12 @@ export default function Layout() {
     }
 
     try {
-      const response = await axios.post(
-        'https://todo-cloudy.onrender.com/api/notes/addnote',
-        currentNote,
-        {
-          headers: { authorization: `Bearer ${token}` },
-        }
-      );
-
-      setNotes((prev) => [...prev, response.data]);
+      await AddNoteMutation({
+        ...currentNote,
+        headers: { authorization: `Bearer ${token}` },
+      })
       setCurrentNote({ _id: "", title: "", description: "", tag: "", date: "" });
-      fetchNotes();
+      refetch();
       setSnackbar({
         open: true,
         message: "Note added successfully!",
@@ -98,22 +87,21 @@ export default function Layout() {
     }
   };
 
+  const [updateNote] = useUpdateNoteMutation();
   const handleSaveEdit = async (note: Note) => {
     try {
-      await axios.put(
-        'https://todo-cloudy.onrender.com/api/notes/updatenote/${note._id}',
-        note,
-        {
-          headers: { authorization: `Bearer ${token}` },
-        }
-      );
+      await updateNote({
+        id: note._id,
+        data: note,
+        headers: { authorization: `Bearer ${token}` },
+      });
       setSnackbar({
         open: true,
         message: "Note updated successfully!",
         severity: "success",
       });
       setEdit(false);
-      fetchNotes();
+      refetch();
     } catch (error) {
       setSnackbar({
         open: true,
@@ -124,13 +112,14 @@ export default function Layout() {
     }
   };
 
-  const handleDeleteNote = async (id: string) => {
+  const [deleteNote] = useDeleteNoteMutation();
+  const handleDeleteNote = async (_id: string) => {
     try {
-      await axios.delete('https://todo-cloudy.onrender.com/api/notes/deletenote/${id}', {
+      await deleteNote({
+        id: _id,
         headers: { authorization: `Bearer ${token}` },
-      });
-      setNotes((prev) => prev.filter((note) => note._id !== id));
-      fetchNotes();
+      })
+      refetch();
       setSnackbar({
         open: true,
         message: "Note deleted successfully!",
@@ -145,10 +134,9 @@ export default function Layout() {
       console.error("Error deleting note:", error);
     }
   };
-
-  useEffect(() => {
-    if (token) fetchNotes();
-  }, [token]);
+  const fetchNotes = useCallback(() => {
+    refetch()
+  }, [refetch]);
 
   return (
     <div>

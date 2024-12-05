@@ -5,10 +5,13 @@ import Signup from "./pages/Signup";
 // import Main from "./pages/Main";
 import ErrorPage from "./pages/ErrorPage";
 import Layout from "./components/Layout/Layout";
+import { store } from "./redux/store";
+import { Provider } from "react-redux";
 
 function App() {
   return (
     <BrowserRouter basename="inotes-frontend">
+      <Provider store={store}>
       <div className="App">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -18,6 +21,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
         </Routes>
       </div>
+      </Provider>
     </BrowserRouter>
   );
 }
