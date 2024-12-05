@@ -9,7 +9,7 @@ export default function ErrorPage() {
     <Box>
         <Typography variant="body1" component="p">Sorry, we are unable to process your signup</Typography>
         <Typography>Go back to home page</Typography>
-        <Button variant="outlined" onClick={()=>{navigate('/home')}}>Go Back</Button>
+        <Button variant="outlined" onClick={()=>{navigate('/')}}>Go Back</Button>
     </Box>
     </Stack>
   )
