@@ -17,7 +17,6 @@ interface SignupFormData {
 }
 
 const Signup: React.FC = () => {
-  const api_url = import.meta.env.VITE_API_URL;
   const [formData, setFormData] = useState<SignupFormData>({
     name: "",
     email: "",
@@ -47,7 +46,7 @@ const Signup: React.FC = () => {
   const handleSignup = async () => {
     try {
       const response = await axios.post(
-        `${api_url}/api/auth/createuser`,
+        'https://todo-cloudy.onrender.com/api/auth/createuser',
         formData,
         {
           headers: {

@@ -36,12 +36,11 @@ export default function Main({
   setCurrentNote: (note: Note) => void;
   handleAddNote: () => void;
 }) {
-  const api_url = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const token = secureLocalStorage.getItem("authToken");
   const [userData, setUserData] = useState<UserData | null>(null);
   // const api = import.meta.env.VITE_API_URL
-  const url = `${api_url}/api/auth/getuser`;
+  const url = 'https://todo-cloudy.onrender.com/api/auth/getuser';
 
   useEffect(() => {
     const fetchUser = async () => {
