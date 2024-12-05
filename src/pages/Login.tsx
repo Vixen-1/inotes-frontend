@@ -45,7 +45,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `https://inotes-backend/khaki/api/auth/login`,
+        `/api/auth/login`,
         formData,
         {
           headers: {
