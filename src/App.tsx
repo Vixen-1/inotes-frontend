@@ -8,7 +8,7 @@ import Layout from "./components/Layout/Layout";
 
 function App() {
   return (
-    <BrowserRouter basename="inotes">
+    <BrowserRouter basename="inotes-frontend">
       <div className="App">
         <Routes>
           <Route path="/" element={<Home />} />

@@ -1,7 +1,7 @@
 {
   "name": "inotes",
   "private": true,
-  "homepage": "/inotes",
+  "homepage": "/inotes-frontend",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
