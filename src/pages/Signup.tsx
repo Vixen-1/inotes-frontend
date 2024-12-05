@@ -17,6 +17,7 @@ interface SignupFormData {
 }
 
 const Signup: React.FC = () => {
+  const api_url = import.meta.env.VITE_API_URL;
   const [formData, setFormData] = useState<SignupFormData>({
     name: "",
     email: "",
@@ -46,7 +47,7 @@ const Signup: React.FC = () => {
   const handleSignup = async () => {
     try {
       const response = await axios.post(
-        `/api/auth/createuser`,
+        `${api_url}/api/auth/createuser`,
         formData,
         {
           headers: {
