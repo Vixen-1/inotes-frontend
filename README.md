@@ -48,6 +48,23 @@ A **Notes Management Application** built with modern technologies to create, upd
      ```bash
      npm run dev
 
+
+## 🔑 Authentication
+
+The app uses **JWT (JSON Web Token)** for secure user authentication.
+
+### Workflow
+
+1. **Login**
+   - Users authenticate by providing their credentials.
+   - A JWT token is generated and securely stored in `secureLocalStorage`.
+
+   ```javascript
+   secureLocalStorage.setItem("authToken", token);
+
+2. **Api Requests***
+- Before making any API requests, the app checks if a valid JWT token exists in `secure local storage`
+
 ## 📁 Project Structure
 
 The project is organized as follows:
@@ -72,22 +89,3 @@ src/
 ├── App.tsx               # Root component
 ├── index.tsx             # Entry point
 └── vite.config.ts        # Vite configuration for the project
-
-
-
-## 🔑 Authentication
-
-The app uses **JWT (JSON Web Token)** for secure user authentication.
-
-### Workflow
-
-1. **Login**
-   - Users authenticate by providing their credentials.
-   - A JWT token is generated and securely stored in `secureLocalStorage`.
-
-   ```javascript
-   secureLocalStorage.setItem("authToken", token);
-
-2. **Api Requests***
-- Before making any API requests, the app checks if a valid JWT token exists in `secure local storage`
-
