@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
+import { createTheme, ThemeProvider } from "@mui/material";
 import axios from "axios";
 import {
   Box,
@@ -45,6 +46,18 @@ const Signup: React.FC = () => {
     setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
+  const theme = createTheme({
+    components: {
+      MuiTextField: {
+        styleOverrides: {
+          root: {
+            backgroundColor: "lightgray",
+            borderRadius: "8px",
+          },
+        },
+      },
+    },
+  });
   const validateFields = () => {
     const newErrors = { name: "", email: "", password: "" };
 
@@ -149,10 +162,11 @@ const Signup: React.FC = () => {
 
       >
         <Box className="signup-box">
-          <Typography variant="h4" color={"black"} textAlign={"center"} fontWeight={'bold'} pt={3}>
+          <Typography variant="h4" color={"white"} textAlign={"center"} fontWeight={'bold'} pt={3}>
             Signup
           </Typography>
           <form onSubmit={handleSubmit} className="m-8">
+          <ThemeProvider theme={theme}>
             <Box display={'flex'} flexDirection={'column'} gap={2}>
               <Box>
                 <Typography className="label">Name</Typography>
@@ -164,7 +178,7 @@ const Signup: React.FC = () => {
                   onChange={handleChange}
                   error={!!errors.name}
                   helperText={errors.name}
-                  className="input-login text-white"
+                  className="input-login Themed TextField"
                 />
               </Box>
               <Box>
@@ -177,7 +191,7 @@ const Signup: React.FC = () => {
                   onChange={handleChange}
                   error={!!errors.email}
                   helperText={errors.email}
-                  className="input-login"
+                  className="input-login Themed TextField"
                 />
               </Box>
               <Box>
@@ -190,10 +204,11 @@ const Signup: React.FC = () => {
                   onChange={handleChange}
                   error={!!errors.password}
                   helperText={errors.password}
-                  className="input-login"
+                  className="input-login Themed TextField"
                 />
               </Box>
             </Box>
+            </ThemeProvider>
             {loading?<Loader /> : <Box className="submit-button mt-6">
               <button type="submit">Signup</button>
             </Box>}

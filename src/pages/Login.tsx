@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { createTheme, ThemeProvider } from "@mui/material";
 import "../assets/styles/common.css";
 import { useState } from "react";
 import secureLocalStorage from "react-secure-storage";
@@ -33,6 +34,33 @@ const Login = () => {
     });
   };
 
+  const theme = createTheme({
+    components: {
+      MuiTextField: {
+        styleOverrides: {
+          root: {
+            backgroundColor: "rgba(255,255,255, 0.6) ",
+            height: "50px",
+          },
+        },
+      },
+      // MuiOutlinedInput: {
+      //   styleOverrides: {
+      //     root: {
+      //       "& fieldset": {
+      //         borderColor: "green",
+      //       },
+      //       "&:hover fieldset": {
+      //         borderColor: "blue",
+      //       },
+      //       "&.Mui-focused fieldset": {
+      //         borderColor: "red",
+      //       },
+      //     },
+      //   },
+      // },
+    },
+  });
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -126,9 +154,10 @@ const Login = () => {
             Login
           </Typography>
           <form onSubmit={handleSubmit} className="form m-10">
-            <Box>
+          <ThemeProvider theme={theme}>
+            <Box display={'flex'} flexDirection={'column'} gap={2} >
               <Box>
-                <Typography className="label">Email</Typography>
+                <Typography className="label Themed TextField">Email</Typography>
                 <TextField
                   type="email"
                   name="email"
@@ -140,7 +169,7 @@ const Login = () => {
                 />
               </Box>
               <Box>
-                <Typography className="label pt-4">Password</Typography>
+                <Typography className="label Themed TextField pt-4">Password</Typography>
                 <TextField
                   type="password"
                   name="password"
@@ -152,6 +181,7 @@ const Login = () => {
                 />
               </Box>
             </Box>
+            </ThemeProvider>
             {loading? <Box className="pt-5"><Loader /></Box> : <Box className="submit-button mt-10">
               <button type="submit">Login</button>
             </Box>}

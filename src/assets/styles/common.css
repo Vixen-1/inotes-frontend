@@ -31,15 +31,14 @@
     max-width: 35%;
     max-height: 91%;
     padding-top: 8px;
-    background-color: rgb(255, 255, 255, 0.7);
+    background-color: rgb(255, 255, 255, 0.3);
     box-shadow: 0pc;
     border-radius: 20px;
     position: fixed;
 }
 
 .label{
-    color: black;
-    font-weight: 600;
+    color: white;
     font-style: mySecondFont;
 }
 
@@ -85,7 +84,7 @@
     padding: 4px;
     margin-top: 6px;
     text-align: center;
-    color: black;
+    color: white;
 }
 .bottom-link{
     font-weight: bolder;
