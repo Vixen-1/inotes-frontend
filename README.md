@@ -1,30 +1,81 @@
-# React + TypeScript + Vite
+# Notes Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A **Notes Management Application** built with modern technologies to create, update, delete, and manage personal notes. The application includes user authentication and leverages efficient state management, responsive UI, and seamless API integration.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **User Authentication**: Login/Logout functionality with secure token storage using `secureLocalStorage`.
+- **CRUD Operations**: Create, Read, Update, and Delete notes.
+- **Responsive UI**: Built with Material-UI (`@mui/material`) for a clean, responsive design.
+- **Dynamic Fetching**: Data fetching and caching using `RTK Query`.
+- **Real-Time State Management**: Leveraging Redux Toolkit for global state management.
+- **Error Handling**: Snackbar notifications for user feedback.
+- **Smooth Navigation**: React Router for seamless client-side routing.
+- **Deployment Ready**: Optimized for production with a scalable structure.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 🛠 Tech Stack
 
-- Configure the top-level `parserOptions` property like this:
+### Frontend
+- **React** with TypeScript: Component-based architecture for scalable and maintainable code.
+- **Material-UI (MUI)**: For responsive and accessible UI components.
+- **Redux Toolkit**: Simplified state management and side-effect handling.
+- **RTK Query**: For efficient data fetching, caching, and state synchronization.
+- **React Router**: Client-side routing for a seamless user experience.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+### Backend
+- **Express.js**: RESTful API design with token-based authentication using `JWT`.
+- **MongoDB Atlas**: Cloud database for storing user data and notes.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+---
+
+## 🧑‍💻 Installation and Setup
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/Vixen-1/inotes-frontend.git
+   cd inotes-frontend
+
+2. **Install Dependencies**
+   ```bash
+    npm install
+
+3. **Set Up Environment Variables**
+    Set up envionments based on inotes-backend git repo
+
+4. **Run the Application**
+     ```bash
+     npm run dev
+
+***project structure***
+
+.
+├── src
+│   ├── components       # Reusable components (Navbar, Notes, etc.)
+│   ├── pages            # Application pages (Main, Login, ErrorPage)
+│   ├── redux            # RTK Query API slice and Redux store
+│   ├── styles           # Custom styles and theme overrides
+│   ├── App.tsx          # Main application component
+│   ├── index.tsx        # Entry point for React
+│   └── utils            # Utility functions
+├── public               # Static assets
+├── .env                 # Environment variables
+└── README.md            # Documentation
+
+## 🔑 Authentication
+
+The app uses **JWT (JSON Web Token)** for secure user authentication.
+
+### Workflow
+
+1. **Login**
+   - Users authenticate by providing their credentials.
+   - A JWT token is generated and securely stored in `secureLocalStorage`.
+
+   ```javascript
+   secureLocalStorage.setItem("authToken", token);
+
+2. **Api Requests***
+- Before making any API requests, the app checks if a valid JWT token exists in `secure local storage`
+

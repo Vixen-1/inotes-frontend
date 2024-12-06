@@ -51,8 +51,9 @@ const Signup: React.FC = () => {
       MuiTextField: {
         styleOverrides: {
           root: {
-            backgroundColor: "lightgray",
+            backgroundColor: "rgba(255,255,255, 0.6)",
             borderRadius: "8px",
+            height: "50px",
           },
         },
       },

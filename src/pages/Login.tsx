@@ -41,6 +41,7 @@ const Login = () => {
           root: {
             backgroundColor: "rgba(255,255,255, 0.6) ",
             height: "50px",
+            borderRadius: "8px",
           },
         },
       },
@@ -145,7 +146,7 @@ const Login = () => {
       >
         <Box className="signup-box">
           <Typography
-            color={"black"}
+            color={"white"}
             fontWeight={'bold'}
             variant="h4"
             textAlign={"center"}
