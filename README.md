@@ -48,20 +48,32 @@ A **Notes Management Application** built with modern technologies to create, upd
      ```bash
      npm run dev
 
-***project structure***
+## 📁 Project Structure
 
-.
-├── src
-│   ├── components       # Reusable components (Navbar, Notes, etc.)
-│   ├── pages            # Application pages (Main, Login, ErrorPage)
-│   ├── redux            # RTK Query API slice and Redux store
-│   ├── styles           # Custom styles and theme overrides
-│   ├── App.tsx          # Main application component
-│   ├── index.tsx        # Entry point for React
-│   └── utils            # Utility functions
-├── public               # Static assets
-├── .env                 # Environment variables
-└── README.md            # Documentation
+The project is organized as follows:
+
+```plaintext
+src/
+├── assets/               # Static assets (images, icons, etc.)
+├── components/           # Reusable React components
+│   ├── Navbar/           # Navbar component
+│   ├── Notes/            # Notes component
+│   └── Layout.tsx        # Main layout and logic
+├── pages/                # Page-level components
+│   ├── Main/             # Main page components and logic
+│   └── ErrorPage.tsx     # Error handling page
+├── redux/                # Redux Toolkit store and slices
+│   ├── ApiSlice.ts       # RTK Query API definitions
+│   └── store.ts          # Redux store setup
+├── styles/               # Custom MUI styling and global styles
+│   └── overrides.ts      # MUI component overrides
+├── utils/                # Utility functions and helpers
+│   └── secureLocalStorage.ts # Secure storage for authentication tokens
+├── App.tsx               # Root component
+├── index.tsx             # Entry point
+└── vite.config.ts        # Vite configuration for the project
+
+
 
 ## 🔑 Authentication
 
