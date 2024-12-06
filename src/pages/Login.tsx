@@ -117,7 +117,8 @@ const Login = () => {
       >
         <Box className="signup-box">
           <Typography
-            color={"white"}
+            color={"black"}
+            fontWeight={'bold'}
             variant="h4"
             textAlign={"center"}
             paddingTop={3}

@@ -146,9 +146,10 @@ const Signup: React.FC = () => {
         display={"flex"}
         justifyContent={"center"}
         alignItems={"center"}
+
       >
         <Box className="signup-box">
-          <Typography variant="h4" color={"white"} textAlign={"center"} pt={3}>
+          <Typography variant="h4" color={"black"} textAlign={"center"} fontWeight={'bold'} pt={3}>
             Signup
           </Typography>
           <form onSubmit={handleSubmit} className="m-8">
