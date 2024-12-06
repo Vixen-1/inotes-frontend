@@ -59,7 +59,7 @@ export default function Layout() {
   const {data: apiResponse=[], error, refetch} = useGetAllDataQuery({});
 
   useEffect(()=>{
-    refetchUserData();
+    // refetchUserData();
     if (userResponse) setUserData(userResponse);
     if (userError) navigate("/errorpage");
     if(apiResponse && userData !== null)
