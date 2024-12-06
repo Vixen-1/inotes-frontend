@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -9,7 +9,7 @@ import {
   Grid,
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faFloppyDisk, faTrash } from "@fortawesome/free-solid-svg-icons";
 import secureLocalStorage from "react-secure-storage";
 import image2 from "../../assets/image.jpg";
 
@@ -22,16 +22,12 @@ interface Note {
 }
 
 export default function Notes({
-  edit,
-  setEdit,
   notes,
   setNotes,
   fetchNotes,
   handleSaveEdit,
-  handleDeleteNote
+  handleDeleteNote,
 }: {
-  edit: boolean;
-  setEdit: (edit: boolean) => void;
   notes: Note[];
   setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
   fetchNotes: () => void;
@@ -40,6 +36,8 @@ export default function Notes({
 }) {
   const token = secureLocalStorage.getItem("authToken");
 
+  // Track which note is being edited
+  const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
 
   useEffect(() => {
     if (token) fetchNotes();
@@ -47,14 +45,14 @@ export default function Notes({
 
   const formatDateAndTime = (isoString: string) => {
     const dateObj = new Date(isoString);
-  
+
     // Format date as dd-mm-yyyy
     const date = dateObj.toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
     });
-  
+
     // Format time as hh:mm:ss
     const time = dateObj.toLocaleTimeString("en-US", {
       hour: "2-digit",
@@ -62,11 +60,10 @@ export default function Notes({
       second: "2-digit",
       hour12: false, // 24-hour format
     });
-  
+
     return { date, time };
   };
 
-  
   return (
     <Box
       sx={{
@@ -97,21 +94,7 @@ export default function Notes({
           padding: "20px",
         }}
       >
-        {/* <Typography
-          variant="h3"
-          align="center"
-          gutterBottom
-          sx={{
-            color: "rgba(208, 207, 208)",
-            fontWeight: "bold",
-            // marginTop: "40px",
-            textShadow: "2px 2px 8px rgba(0, 0, 0, 0.8)",
-          }}
-        >
-          Notes Manager
-        </Typography> */}
-
-        <Grid container marginTop={'40px'} spacing={3}>
+        <Grid container marginTop={"40px"} spacing={3}>
           {notes.map((note) => (
             <Grid item xs={12} sm={6} md={4} key={note._id}>
               <Card
@@ -133,32 +116,32 @@ export default function Notes({
                 }}
               >
                 <CardContent>
-                  <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
-                  <Typography
-                    variant="caption"
-                    color="primary"
-                    sx={{ marginTop: "16px", display: "block" }}
-                    contentEditable={edit}
-                    suppressContentEditableWarning
-                    onBlur={(e) =>
-                      setNotes((prevNotes:Note[]) => {
-                        return prevNotes.map((prevNote) =>
-                          prevNote._id === note._id
-                            ? { ...prevNote, tag: e.target.textContent || "" }
-                            : prevNote
-                        );
-                      })
-                    }
-                  >
-                    #{note.tag}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    color="textSecondary"
-                    sx={{ marginTop: "16px", display: "block" }}                    
-                  >
-                    {`Date: ${formatDateAndTime(note.date).date} Time: ${formatDateAndTime(note.date).time} `}
-                  </Typography>
+                  <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"}>
+                    <Typography
+                      variant="caption"
+                      color="primary"
+                      sx={{ marginTop: "16px", display: "block" }}
+                      contentEditable={editingNoteId === note._id}
+                      suppressContentEditableWarning
+                      onBlur={(e) =>
+                        setNotes((prevNotes: Note[]) => {
+                          return prevNotes.map((prevNote) =>
+                            prevNote._id === note._id
+                              ? { ...prevNote, tag: e.target.textContent || "" }
+                              : prevNote
+                          );
+                        })
+                      }
+                    >
+                      #{note.tag}
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      color="textSecondary"
+                      sx={{ marginTop: "16px", display: "block" }}
+                    >
+                      {`Date: ${formatDateAndTime(note.date).date} Time: ${formatDateAndTime(note.date).time} `}
+                    </Typography>
                   </Box>
                   <Typography
                     fontWeight="bold"
@@ -166,7 +149,7 @@ export default function Notes({
                     marginY={2}
                     className="capitalize"
                     gutterBottom
-                    contentEditable={edit}
+                    contentEditable={editingNoteId === note._id}
                     suppressContentEditableWarning
                     onBlur={(e) =>
                       setNotes((prevNotes) => {
@@ -190,7 +173,7 @@ export default function Notes({
                       WebkitLineClamp: 3,
                       WebkitBoxOrient: "vertical",
                     }}
-                    contentEditable={edit}
+                    contentEditable={editingNoteId === note._id}
                     suppressContentEditableWarning
                     onBlur={(e) =>
                       setNotes((prevNotes) => {
@@ -205,13 +188,19 @@ export default function Notes({
                     {note.description}
                   </Typography>
                 </CardContent>
-                <CardActions>
-                  {!edit ? (
+                <CardActions
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {editingNoteId !== note._id ? (
                     <Button
                       size="small"
                       color="primary"
                       startIcon={<FontAwesomeIcon icon={faEdit} />}
-                      onClick={() => setEdit(true)}
+                      onClick={() => setEditingNoteId(note._id)}
                     >
                       Edit
                     </Button>
@@ -219,8 +208,11 @@ export default function Notes({
                     <Button
                       size="small"
                       color="primary"
-                      startIcon={<FontAwesomeIcon icon={faEdit} />}
-                      onClick={() => handleSaveEdit(note)}
+                      startIcon={<FontAwesomeIcon icon={faFloppyDisk} />}
+                      onClick={() => {
+                        handleSaveEdit(note);
+                        setEditingNoteId(null);
+                      }}
                     >
                       Save
                     </Button>

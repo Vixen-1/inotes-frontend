@@ -4,7 +4,8 @@ import Notes from "./Notes";
 import { useCallback, useEffect, useRef, useState } from "react";
 import secureLocalStorage from "react-secure-storage";
 import { Snackbar, Alert } from "@mui/material";
-import { useAddNoteMutation, useDeleteNoteMutation, useGetAllDataQuery, useUpdateNoteMutation } from "../../redux/ApiSlice";
+import { useAddNoteMutation, useDeleteNoteMutation, useGetAllDataQuery, useGetUserDataQuery, useUpdateNoteMutation } from "../../redux/ApiSlice";
+import { useNavigate } from "react-router-dom";
 
 interface Note {
   _id: string;
@@ -14,14 +15,23 @@ interface Note {
   date: string;
 }
 
+interface UserData {
+  _id: string;
+  name: string;
+  email: string;
+}
+
 export default function Layout() {
   const notesRef = useRef<HTMLDivElement>(null);
   const scrollToNotes = () => {
     notesRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const [edit, setEdit] = useState<boolean>(false);
+  // const [edit, setEdit] = useState<boolean>(false);
   const [notes, setNotes] = useState<Note[]>([]);
+
+  const [userData, setUserData] = useState<UserData | null>(null);
+
   const [currentNote, setCurrentNote] = useState<Note>({
     _id: "",
     title: "",
@@ -40,11 +50,19 @@ export default function Layout() {
     setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
+  const navigate = useNavigate();
+  
   const token = secureLocalStorage.getItem("authToken");
 
+  const { data: userResponse, error:userError, refetch: refetchUserData } = useGetUserDataQuery({});
+
   const {data: apiResponse=[], error, refetch} = useGetAllDataQuery({});
+
   useEffect(()=>{
-    if(apiResponse)
+    refetchUserData();
+    if (userResponse) setUserData(userResponse);
+    if (userError) navigate("/errorpage");
+    if(apiResponse && userData !== null)
       setNotes(apiResponse)
     if(error)
       setSnackbar({
@@ -52,7 +70,7 @@ export default function Layout() {
         message: "Error fetching notes",
         severity: "error",
       });
-  }, [apiResponse,error])
+  }, [apiResponse, error, navigate, refetchUserData, userData, userError, userResponse])
 
   const [AddNoteMutation] = useAddNoteMutation();
   const handleAddNote = async () => {
@@ -100,7 +118,7 @@ export default function Layout() {
         message: "Note updated successfully!",
         severity: "success",
       });
-      setEdit(false);
+      // setEdit(false);
       refetch();
     } catch (error) {
       setSnackbar({
@@ -138,11 +156,19 @@ export default function Layout() {
     refetch()
   }, [refetch]);
 
+  const handleLogout = () => {
+    secureLocalStorage.removeItem("authToken");
+    setUserData(null);
+    navigate("/");
+  };
+  
   return (
     <div>
-      <Navbar buttonName="Logout" />
+      <Navbar buttonName="Logout" handleLogout={handleLogout} />
       <Main
         notes={notes}
+        userData={userData}
+        error={!!userError}
         onMakeNotesClick={scrollToNotes}
         currentNote={currentNote}
         setCurrentNote={setCurrentNote}
@@ -156,8 +182,8 @@ export default function Layout() {
             fetchNotes={fetchNotes}
             handleSaveEdit={handleSaveEdit}
             handleDeleteNote={handleDeleteNote}
-            edit={edit}
-            setEdit={setEdit}
+            // edit={edit}
+            // setEdit={setEdit}
           />
         </div>
       )}

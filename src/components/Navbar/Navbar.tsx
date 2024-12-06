@@ -1,13 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
-import secureLocalStorage from "react-secure-storage";
+// import secureLocalStorage from "react-secure-storage";
 
-export default function Navbar({ buttonName }: { buttonName?: string }) {
+export default function Navbar({ buttonName, handleLogout }: { buttonName?: string, handleLogout: ()=> void }) {
   const navigate = useNavigate();
-  const handleLogout = async () => {
-    await secureLocalStorage.removeItem("authToken");
-    navigate("/");
-  };
+
   return (
     <nav className="navbar-data fixed overflow-x-hidden animate-fadeIn">
       <div className="navbar">

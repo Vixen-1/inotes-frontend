@@ -1,12 +1,12 @@
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import "../assets/styles/common.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import image from "../assets/ohho.jpg";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useGetUserDataQuery } from "../redux/ApiSlice";
+// import { useGetUserDataQuery } from "../redux/ApiSlice";
 
 interface UserData {
   _id: string;
@@ -24,27 +24,23 @@ interface Note {
 
 export default function Main({
   notes,
+  userData,
+  error,
   onMakeNotesClick,
   currentNote,
   setCurrentNote,
   handleAddNote,
 }: {
   notes: Note[];
+  userData: UserData | null;
+  error: boolean | null;
   onMakeNotesClick: () => void;
   currentNote: Note;
   setCurrentNote: (note: Note) => void;
   handleAddNote: () => void;
 }) {
+  // console.log(notes);
   const navigate = useNavigate();
-  const [userData, setUserData] = useState<UserData | null>(null);
-
-  const { data: apiResponse, error } = useGetUserDataQuery({});
-  useEffect(() => {
-    if (apiResponse) setUserData(apiResponse);
-    if (error) navigate("/errorpage");
-  }, [apiResponse, error, navigate]);
-
-  console.log(notes);
   const [errors, setErrors] = useState({
     title: false,
     description: false,
@@ -110,7 +106,7 @@ export default function Main({
 
       {/* Main Content */}
       <Box className="relative z-10 flex flex-col items-center justify-center h-full text-center">
-        {userData ? (
+        {userData && userData?.name ? (
           <Box
             display={"flex"}
             flexDirection={"row"}
@@ -125,7 +121,7 @@ export default function Main({
               padding={4}
             >
               <h2 className="text-5xl cursor-default font-medium text-black tracking-widest capitalize min-h-50">
-                Welcome, {userData.name}!
+                Welcome, {userData?.name}!
               </h2>
               <h4 className="text-2xl min-h-48 cursor-default md:text-4xl tracking-widest capitalize pt-12">
                 Let's organize your world, one note at a time!
@@ -144,7 +140,7 @@ export default function Main({
 
             {/* Form Section */}
             <Stack
-              className="relative block overflow-hidden animate-slideInFromRight"
+              className="relative block overflow-hidden animate-slideInFromTop"
               sx={{
                 padding: 4,
                 margin: "auto",
@@ -271,24 +267,30 @@ export default function Main({
           </Box>
         ) : (
           <Box className="flex flex-col gap-6 justify-center tracking-widest animate-pulse">
-            <Typography
-              variant="h5"
-              color={"black"}
-              fontWeight={"bold"}
-              className="bottom-link font-bold text-white drop-shadow-lg"
-            >
-              Authentication failed!
-            </Typography>
-            <Box className="bottom text-black font-bold">
-              Go back to Home page{" "}
-              <Button
-                variant="contained"
-                className="bottom-link"
-                onClick={() => navigate("/")}
-              >
-                Go Back
-              </Button>
-            </Box>
+            {error ? (
+              <Box>
+                <Typography
+                  variant="h5"
+                  color={"black"}
+                  fontWeight={"bold"}
+                  className="bottom-link font-bold text-white drop-shadow-lg"
+                >
+                  Authentication failed!
+                </Typography>
+                <Box className="bottom text-black font-bold">
+                  Go back to Home page{" "}
+                  <Button
+                    variant="contained"
+                    className="bottom-link"
+                    onClick={() => navigate("/")}
+                  >
+                    Go Back
+                  </Button>
+                </Box>
+              </Box>
+            ) : (
+              <Typography>Loading.... </Typography>
+            )}
           </Box>
         )}
       </Box>

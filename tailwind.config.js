@@ -20,7 +20,7 @@ export default {
       animation: {
         fadeIn: "fadeIn 3s ease-in-out",
         bounce3: "bounceLimited 2s cubic-bezier(0.5, 0, 0.9, 1) 2",
-        slideInFromLeft: "slideInFromLeft 4s ease-out forwards",
+        slideInFromLeft: "slideInFromLeft 3s ease-out forwards",
       },
     },
   },

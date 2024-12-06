@@ -1,4 +1,4 @@
-@keyframes slideInFromRight {
+@keyframes slideInFromTop {
     from {
       transform: translateY(-100%);
       opacity: 0;
@@ -9,13 +9,14 @@
     }
   }
   
-  .animate-slideInFromRight {
-    animation: slideInFromRight 4s ease-out backwards;
+  .animate-slideInFromTop {
+    animation: slideInFromTop 3s ease-out backwards;
   }
 
 .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
-    border:1px solid rgba(255,255,255) !important;
+    /* border:1px solid rgba(255,255,255) !important; */
     background: rgba(255,255,255, 0.4) !important;
+    /* color: white !important; */
 }
 
 
@@ -42,7 +43,11 @@
     /* min-height: 50px; */
     /* line-height: 50px; */
 }
-
+.input-login{
+  width: 100%;
+  height: 52px;
+  color: white;
+}
 .input-desc{
   width: 100%;
     height: 125px;

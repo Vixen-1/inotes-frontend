@@ -6,9 +6,10 @@ import axios from "axios";
 import image from "../assets/main-bg.jpg";
 import { Box, Stack, TextField, Typography } from "@mui/material";
 import "../App.css";
-import { FcGoogle } from "react-icons/fc";
-import { SiFacebook } from "react-icons/si";
+// import { FcGoogle } from "react-icons/fc";
+// import { SiFacebook } from "react-icons/si";
 import { Snackbar, Alert } from "@mui/material";
+import Loader from "../components/Loader";
 
 interface LoginFormData {
   email: string;
@@ -16,6 +17,7 @@ interface LoginFormData {
 }
 
 const Login = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
@@ -42,6 +44,7 @@ const Login = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const response = await axios.post(
@@ -65,7 +68,7 @@ const Login = () => {
         navigate("/mainpage");
       }
       if (response.data.error) {
-        setError(response.data.error);
+        await setError(response.data.error);
         setSnackbar({
           open: true,
           message: `${error}`,
@@ -75,7 +78,7 @@ const Login = () => {
       }
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
-        setError(err.response.data.error);
+        await setError(err.response.data.error);
         setSnackbar({
           open: true,
           message: `${error}`,
@@ -90,17 +93,18 @@ const Login = () => {
           severity: "error",
         });
       }
-      // navigate("/errorpage");
+    }finally{
+      setLoading(false);
     }
   };
 
-  const handleGoogleLogin = () => {
-    window.location.href = "/auth/google";
-  };
+  // const handleGoogleLogin = () => {
+  //   window.location.href = "/auth/google";
+  // };
 
-  const handleFacebookLogin = () => {
-    window.location.href = "/auth/facebook";
-  };
+  // const handleFacebookLogin = () => {
+  //   window.location.href = "/auth/facebook";
+  // };
 
   return (
     <Stack className="signup">
@@ -131,7 +135,7 @@ const Login = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="input"
+                  className="input-login text-white"
                 />
               </Box>
               <Box>
@@ -143,16 +147,16 @@ const Login = () => {
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  className="input"
+                  className="input-login text-white"
                 />
               </Box>
             </Box>
-            <Box className="submit-button mt-6">
+            {loading? <Box className="pt-5"><Loader /></Box> : <Box className="submit-button mt-10">
               <button type="submit">Login</button>
-            </Box>
+            </Box>}
           </form>
 
-          <Box
+          {/* <Box
             display={"flex"}
             flexDirection={"row"}
             gap={10}
@@ -166,7 +170,7 @@ const Login = () => {
               className="bottom-link text-2xl"
               onClick={handleFacebookLogin}
             />
-          </Box>
+          </Box> */}
 
           <Box className="bottom">
             Don't have an account?{" "}
