@@ -28,6 +28,7 @@ const Signup: React.FC = () => {
     email: "",
     password: "",
   });
+  const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState({
     name: "",
     email: "",
@@ -86,19 +87,32 @@ const Signup: React.FC = () => {
           severity: "success",
         });
         navigate("/mainpage");
-      } else if (response.data.error) {
+        setError(null);
+      } else if (response.status === 400 && response.data.error) {
+        await setError(response.data.error)
         setSnackbar({
           open: true,
-          message: response.data.error,
+          message: `${error}`,
           severity: "error",
         });
       }
     } catch (err) {
-      setSnackbar({
-        open: true,
-        message: "An unexpected error occurred.",
-        severity: "error",
-      });
+      if (axios.isAxiosError(err) && err.response) {
+        await setError(err.response.data.error);
+        setSnackbar({
+          open: true,
+          message: `${error}`,
+          severity: "error",
+        });
+        console.log(error);
+      } else {
+        setError("An unexpected error occurred.");
+        setSnackbar({
+          open: true,
+          message: `${error}`,
+          severity: "error",
+        });
+      }
     } finally{
       setLoading(false);
     }

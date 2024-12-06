@@ -13,6 +13,11 @@
     animation: slideInFromTop 3s ease-out backwards;
   }
 
+  .css-1x5jdmq .input{
+    background: rgba(255,255,255, 0.6) !important;
+    height: 45px !important;
+    width: 100% !important;
+  }
 .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
     /* border:1px solid rgba(255,255,255) !important; */
     background: rgba(255,255,255, 0.4) !important;
